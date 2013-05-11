@@ -1,9 +1,7 @@
 Animator
 ========
 
-An HTML5 sprite sheet animator
-
-See http://calhoun137.github.io/animator/
+An HTML5 sprite sheet animator: http://calhoun137.github.io/animator/
 
 Animator is a handy web-app to help anyone who wants to quickly preview animation sequences using a sprite sheet.
 
