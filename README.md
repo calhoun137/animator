@@ -9,3 +9,5 @@ There really isn't much to it, you just drap and drop an image into the giant gr
 frames in the X and Y directions, the time between each frame in milliseconds, and then you specify which frames to
 animate and click animate to watch the magic happen!
 
+License: public domain. 
+
