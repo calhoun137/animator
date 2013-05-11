@@ -1,5 +1,5 @@
 (function() {
-	var dropbox = document.getElementById('drop-area'); 
+	var dropbox = document.getElementById('dropbox'); 
 
 	dropbox.addEventListener('dragenter', stopDefault, false); 
 	dropbox.addEventListener('dragover', stopDefault, false); 
@@ -42,7 +42,7 @@
 
 		reader.onload = (function(aFile) { 
 			return function(evt) { 
-				document.getElementById('dropbox').src = evt.target.result; 
+				dropbox.src = evt.target.result; 
 			} 
 		})(file); 
 

@@ -19,9 +19,9 @@
 		
 		frames = JSON.parse('{"frames":[' + $('#frames').val() +']}').frames;
 		
-		count = 0;
-		
 		if( frames.length > 2 ) {
+
+			count = 0;
 		
 			animating = setInterval(function(){
 				
@@ -35,21 +35,30 @@
 		} else {
 		
 			if( frames.length == 2 ) {
-				startFrame = frames[0];
-				endFrame = frames[1];
+				bpx = startX = -(frames[0] % framesX) * frameWidth;
+				bpy = startY = -((frames[0] / framesX)|0) * frameHeight;
+				maxX = framesX * frameWidth;
+				maxY = ((frames[1] / framesX)|0) * frameHeight;	
+				$('#animation-area').css('background-position', bpx + 'px ' + bpy + 'px' );			
 			} else if( frames.length < 2 ) {
-				startFrame = 0;
-				endFrame = framesX * framesY - 1;
+				startX = 0;
+				startY = 0;
+				maxX = framesX * frameWidth;
+				maxY = framesY * frameHeight;
 			} 
 			
 			animating = setInterval(function(){
 				
-				if( count++ >= endFrame ) {
-					count = startFrame;
-				};
+				bpx = bpx - frameWidth;
 				
-				bpx = -(count % framesX) * frameWidth;
-				bpy = -((count / framesX)|0) * frameHeight;				
+				if( bpx < -maxX ) {
+					bpx = startX;
+					bpy = bpy - frameHeight;
+				}
+				
+				if( bpy < -maxY ) {
+					bpy = startY;
+				}
 
 				$('#animation-area').css('background-position', bpx + 'px ' + bpy + 'px' );
 			},$('#interval').val());
