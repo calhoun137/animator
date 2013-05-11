@@ -1,4 +1,4 @@
-animator
+Animator
 ========
 
 An HTML5 sprite sheet animator
