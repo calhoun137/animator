@@ -41,6 +41,12 @@
 				startFrame = 0;
 				endFrame = framesX * framesY - 1;
 			} 
+
+			count = startFrame;
+			bpx = -(count % framesX) * frameWidth;
+			bpy = -((count / framesX)|0) * frameHeight;	
+			
+			$('#animation-area').css('background-position', bpx + 'px ' + bpy + 'px' );
 			
 			animating = setInterval(function(){
 				
