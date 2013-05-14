@@ -61,13 +61,6 @@
 	$('#clear').click(function(e){setFrames("");});
 	$('#walk').click(buttonFunc);
 	$('#acquire').click(buttonFunc);
-	$('.dynamic-button').click(function(e){
-		setFrames($(this).attr("frames_right"));
-		$.getJSON("character_map.json",function(result){
-			var t = result;
-			setFrames($(this).attr(result[$(this).val()]));
-	    });
-	});
 
 	$('#animate').click(function(e) {
 		e.preventDefault();
