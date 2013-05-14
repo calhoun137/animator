@@ -46,6 +46,11 @@
 	margin-bottom: 20px;
 }
 
+#character-parameters {
+	border: 1px solid black;
+	margin-bottom: 20px;
+}
+
 #animation-area {
 	margin: 0 auto;
 }

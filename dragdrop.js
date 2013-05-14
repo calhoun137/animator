@@ -13,8 +13,7 @@
 
 
 	function onDrop(e) { 
-		e.stopPropagation(); 
-		e.preventDefault(); 
+		stopDefault(e);
 
 		var readFileSize = 0; 
 		var files = e.dataTransfer.files; 
@@ -43,7 +42,7 @@
 		reader.onload = (function(aFile) { 
 			return function(evt) { 
 				document.getElementById('dropbox').src = evt.target.result; 
-			} 
+			};
 		})(file); 
 
 		reader.readAsDataURL(file); 
