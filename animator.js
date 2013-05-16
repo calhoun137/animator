@@ -1,6 +1,7 @@
 (function() {
 	$('#character-parameters').hide();
 	var populatedCharacterButtons = false;
+	var characterMap = null;
 	
 	var animating = 0;
 	
@@ -9,14 +10,10 @@
 		$('#frames').val(frames);
 		$('#animate').click();
 	}
-	//converts frames from hawkthorne format to calhoun's format
+	//converts frames from hawkthorne format to calhoun137's format
 	//e.g. "1-3,1" -> "0,1,2"
-	//non-functional stub
 	function convertToSingleValues(hawkFrames){
 		var result = "";
-		if (typeof(hawkFrames)=="object"){
-			hawkFrames = hawkFrames[0];
-		}
 		var n = hawkFrames.split(",");
 		var row = parseInt(n[1])-1;
 		var frames = n[0].split("-");
@@ -29,38 +26,50 @@
 				}
 			}
 		}else{
-			result = (width*row+parseInt(n[0])-1);
+			result += (width*row+parseInt(n[0])-1);
 		}
 		return result;
 	}
+	
+	//takes an array of frames and conflates it into a string of comma
+	// separated integers as per calhoun137's format
 	function condenseFrames(actionFrames){
 		var result = "";
-		if (actionFrames.length > 1){
-			for (var i=0;i<actionFrames.length;i++){
-				result+=convertToSingleValues(actionFrames[i]);
-				if(i<actionFrames.length-1){
-					result+=",";
-				}
+		for (var i=0;i<actionFrames.length;i++){
+			result+=convertToSingleValues(actionFrames[i]);
+			if(i<actionFrames.length-1){
+				result+=",";
 			}
-		}else{
-			result = convertToSingleValues(actionFrames);
 		}
 		return result;
 	}
-	var buttonFunc = function(e){
-		var btn = $(this);
-		$.getJSON("character_map.json",function(result){
-			var action = result[btn.val().toLowerCase()];
-			var actionRight = action["right"];
-			var actionFrames = actionRight[1];
-			actionFrames = condenseFrames(actionFrames);
-			setFrames(actionFrames);
-	    });
+
+	//function that is called when either the direction or
+	// state dropdown is changed
+	var newActionSelection = function(e){
+		var actionObj = $("#character-states")[0].options;
+		var action = actionObj[actionObj.selectedIndex];
+		action = characterMap[action.value];
+
+		var dirObj = $("#direction")[0].options;
+		var dir = dirObj[dirObj.selectedIndex];
+		dir = dir.value;
+		
+		var actionRight = action[dir];
+		
+		var actionFrames;
+		if(typeof actionRight === 'undefined'){
+			//implements support for 'warp' and 'flyin' which are undirected
+			actionRight = action[1];
+			actionFrames = actionRight;
+		}else{
+			actionFrames = actionRight[1];
+		}
+		actionFrames = condenseFrames(actionFrames);
+		setFrames(actionFrames);
 	};
 	
 	$('#clear').click(function(e){setFrames("");});
-	$('#walk').click(buttonFunc);
-	$('#acquire').click(buttonFunc);
 
 	$('#animate').click(function(e) {
 		e.preventDefault();
@@ -118,8 +127,26 @@ $('#character-preset').click(function(e) {
 		    $("#frames-X").val(12);
 		    $("#frames-Y").val(16);
 		    $('#character-parameters').show();
-		    if (true){
+		    if (!populatedCharacterButtons){
 			    populatedCharacterButtons = true;
+			    $("#character-states").change(newActionSelection);
+			    $("#direction").change(newActionSelection);
+
+				//for some reason https://raw.github.com/hawkthorne/hawkthorne-journey/master/src/character_map.json
+				// doesn't work in chrome, so I use a dropbox version
+			    $.getJSON("https://dl.dropboxusercontent.com/u/13978314/hawkthorne/character_map.json",function(result){
+			    	characterMap = result;
+			    	$.each(result, function(action, obj) {
+			    		var actionLowerCase = action.toLowerCase();
+						
+						var op=document.createElement("option");
+						op.value=actionLowerCase;
+						op.text=actionLowerCase;
+						op.id='cs-'+actionLowerCase;
+						var cs = $("#character-states")[0];
+						cs.appendChild(op);
+			    	});
+			    });
 		    }
 	    }
 });
