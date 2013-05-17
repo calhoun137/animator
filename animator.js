@@ -87,7 +87,7 @@
 		bpx = 0;
 		bpy = 0;
 		
-		frames = JSON.parse('{"frames":[' + $('#frames').val() +']}').frames;
+		var frames = JSON.parse('{"frames":[' + $('#frames').val() +']}').frames;
 		
 		count = 0;
 		
