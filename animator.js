@@ -14,9 +14,9 @@
 	//e.g. "1-3,1" -> "0,1,2"
 	function convertToSingleValues(hawkFrames){
 		var result = "";
-		var n = hawkFrames.split(",");
-		var row = parseInt(n[1])-1;
-		var frames = n[0].split("-");
+		var chunk = hawkFrames.split(",");
+		var row = parseInt(chunk[1])-1;
+		var frames = chunk[0].split("-");
 		var width = 12;
 		if(frames.length>1){
 			for(var i=parseInt(frames[0]);i<=parseInt(frames[1]);i++){
@@ -26,7 +26,7 @@
 				}
 			}
 		}else{
-			result += (width*row+parseInt(n[0])-1);
+			result += (width*row+parseInt(chunk[0])-1);
 		}
 		return result;
 	}
@@ -91,7 +91,7 @@
 		
 		count = 0;
 		
-		
+		if(frames.length>0){
 			animating = setInterval(function(){
 				
 				if( count++ >= frames.length ) count = 0;
@@ -101,7 +101,22 @@
 
 				$('#animation-area').css('background-position', bpx + 'px ' + bpy + 'px' );
 			},$('#interval').val());
-				
+		} else {
+			startFrame = 0;
+			endFrame = framesX * framesY - 1;
+			animating = setInterval(function(){
+
+				if( count++ >= endFrame ) {
+					count = startFrame;
+				};
+
+				bpx = -(count % framesX) * frameWidth;
+				bpy = -((count / framesX)|0) * frameHeight;
+
+				$('#animation-area').css('background-position', bpx + 'px ' + bpy + 'px' );
+			},$('#interval').val());
+
+		}
 	});
 
 $('#character-preset').click(function(e) {
