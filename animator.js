@@ -21,10 +21,10 @@ $(function() {
 		if( frames.length > 2 ) {
 			endFrame = frames.length;
 
-	        var nextFrame = function() {
-	                x = -(frames[count] % framesX) * frameWidth;
-	                y = -((frames[count] / framesX)|0) * frameHeight;	        	
-	        }
+		        var nextFrame = function() {
+		                x = -(frames[count] % framesX) * frameWidth;
+		                y = -((frames[count] / framesX)|0) * frameHeight;	        	
+		        }
 		} else {
 
 			x = -(count % framesX) * frameWidth;
