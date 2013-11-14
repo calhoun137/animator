@@ -49,9 +49,8 @@ $(function() {
 				count = startFrame;
 			};
 			
-			nextFrame();
-
 			$('#animation-area').css('background-position', x + 'px ' + y + 'px' );
+			nextFrame();
 		})();
 		
 		timer = setInterval(animate, $('#interval').val());
