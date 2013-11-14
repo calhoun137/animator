@@ -22,8 +22,8 @@ $(function() {
 			endFrame = frames.length;
 
 	        var nextFrame = function() {
-                x = -(frames[count] % framesX) * frameWidth;
-                y = -((frames[count] / framesX)|0) * frameHeight;	        	
+	                x = -(frames[count] % framesX) * frameWidth;
+	                y = -((frames[count] / framesX)|0) * frameHeight;	        	
 	        }
 		} else {
 
