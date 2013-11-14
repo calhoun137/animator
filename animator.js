@@ -1,67 +1,61 @@
-(function() {
+$(function() {
 
-	var animating = 0;
+	var timer = 0;
 	
-	$('#animate').click(function(e) {
-		e.preventDefault();
-		clearInterval(animating);
-		framesX = $('#frames-X').val();
-		framesY = $('#frames-Y').val();
-		frameWidth = $('#dropbox').width() / framesX;
-		frameHeight = $('#dropbox').height() / framesY;
+	$('#animate').click(function(event) {
+		event.preventDefault();
+
+		var x = y = count = startFrame = endFrame = 0,
+			framesX = $('#frames-X').val(), 
+			framesY = $('#frames-Y').val(),
+			frameWidth = $('#dropbox').width() / framesX,
+			frameHeight = $('#dropbox').height() / framesY;
+			frames = JSON.parse('{"frames":[' + $('#frames').val() +']}').frames;
+
+		clearInterval(timer);
 		
 		$('#animation-area').css('width', frameWidth + 'px');
 		$('#animation-area').css('height', frameHeight + 'px');
 		$('#animation-area').css('background-image', 'url(' + $('#dropbox').attr('src') + ')');
 		
-		bpx = 0;
-		bpy = 0;
-		
-		frames = JSON.parse('{"frames":[' + $('#frames').val() +']}').frames;
-		
-		count = 0;
-		
 		if( frames.length > 2 ) {
-		
-			animating = setInterval(function(){
-				
-				if( count++ >= frames.length ) count = 0;
-				
-				bpx = -(frames[count] % framesX) * frameWidth;
-				bpy = -((frames[count] / framesX)|0) * frameHeight;
+			endFrame = frames.length;
 
-				$('#animation-area').css('background-position', bpx + 'px ' + bpy + 'px' );
-			},$('#interval').val());
+	        var nextFrame = function() {
+                x = -(frames[count] % framesX) * frameWidth;
+                y = -((frames[count] / framesX)|0) * frameHeight;	        	
+	        }
 		} else {
-		
+
+			x = -(count % framesX) * frameWidth;
+			y = -((count / framesX)|0) * frameHeight;	
+
 			if( frames.length == 2 ) {
-				startFrame = frames[0];
+				count = startFrame = frames[0];
 				endFrame = frames[1];
-			} else if( frames.length < 2 ) {
-				startFrame = 0;
+			} else {
 				endFrame = framesX * framesY - 1;
 			} 
 
-			count = startFrame;
-			bpx = -(count % framesX) * frameWidth;
-			bpy = -((count / framesX)|0) * frameHeight;	
-			
-			$('#animation-area').css('background-position', bpx + 'px ' + bpy + 'px' );
-			
-			animating = setInterval(function(){
-				
-				if( count++ >= endFrame ) {
-					count = startFrame;
-				};
-				
-				bpx = -(count % framesX) * frameWidth;
-				bpy = -((count / framesX)|0) * frameHeight;				
+			var nextFrame = function() {
+				x = -(count % framesX) * frameWidth;
+				y = -((count / framesX)|0) * frameHeight;				
+			}
 
-				$('#animation-area').css('background-position', bpx + 'px ' + bpy + 'px' );
-			},$('#interval').val());
+		}
 
-		} 
+		(animate = function(){			
+			if( count++ >= endFrame ) {
+				count = startFrame;
+			};
+			
+			nextFrame();
+
+			$('#animation-area').css('background-position', x + 'px ' + y + 'px' );
+		})();
+		
+		timer = setInterval(animate, $('#interval').val());
 		
 	});
 
-})();
+});
